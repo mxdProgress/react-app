@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.scss';
-import Home from './views/home';
-import News from './views/news';
+import Login from './views/login/index';
 
-import { HashRouter, Switch, Route } from 'react-router-dom';
+import { HashRouter, Switch, Route  } from 'react-router-dom';
 
 class App extends Component{
   constructor(){
@@ -14,12 +12,11 @@ class App extends Component{
   render(){
     return(
       <div className="App">
-        <HashRouter>
+      <HashRouter>
           <Switch>
-            <Route component={Home} exact path="/"></Route>
-            <Route component={News} path="/news"></Route>
+            <Route component={Login} exact path="/"></Route>
           </Switch>
-        </HashRouter>
+      </HashRouter>
       </div>
     )
   }

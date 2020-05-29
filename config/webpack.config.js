@@ -75,9 +75,7 @@ module.exports = function(webpackEnv) {
                 loader: MiniCssExtractPlugin.loader,
                 // css is located in `static/css`, use '../../' to locate index.html folder
                 // in production `paths.publicUrlOrPath` can be a relative path
-                options: paths.publicUrlOrPath.startsWith('.') ?
-                    { publicPath: '../../' } :
-                    {},
+                options: paths.publicUrlOrPath.startsWith('.') ? { publicPath: '../../' } : {},
             },
             {
                 loader: require.resolve('css-loader'),
@@ -132,8 +130,7 @@ module.exports = function(webpackEnv) {
         devtool: isEnvProduction ?
             shouldUseSourceMap ?
             'source-map' :
-            false :
-            isEnvDevelopment && 'cheap-module-source-map',
+            false : isEnvDevelopment && 'cheap-module-source-map',
         // These are the "entry points" to our application.
         // This means they will be the "root" imports that are included in JS bundle.
         entry: [
@@ -163,14 +160,12 @@ module.exports = function(webpackEnv) {
             // There will be one main bundle, and one file per asynchronous chunk.
             // In development, it does not produce real files.
             filename: isEnvProduction ?
-                'static/js/[name].[contenthash:8].js' :
-                isEnvDevelopment && 'static/js/bundle.js',
+                'static/js/[name].[contenthash:8].js' : isEnvDevelopment && 'static/js/bundle.js',
             // TODO: remove this when upgrading to webpack 5
             futureEmitAssets: true,
             // There are also additional JS chunk files if you use code splitting.
             chunkFilename: isEnvProduction ?
-                'static/js/[name].[contenthash:8].chunk.js' :
-                isEnvDevelopment && 'static/js/[name].chunk.js',
+                'static/js/[name].[contenthash:8].chunk.js' : isEnvDevelopment && 'static/js/[name].chunk.js',
             // webpack uses `publicPath` to determine where the app is being served from.
             // It requires a trailing slash, or the file assets will get an incorrect path.
             // We inferred the "public path" (such as / or /my-project) from homepage.
@@ -180,8 +175,7 @@ module.exports = function(webpackEnv) {
                 info =>
                 path
                 .relative(paths.appSrc, info.absoluteResourcePath)
-                .replace(/\\/g, '/') :
-                isEnvDevelopment &&
+                .replace(/\\/g, '/') : isEnvDevelopment &&
                 (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
             // Prevents conflicts when multiple webpack runtimes (from different apps)
             // are used on the same page.
@@ -238,16 +232,14 @@ module.exports = function(webpackEnv) {
                 new OptimizeCSSAssetsPlugin({
                     cssProcessorOptions: {
                         parser: safePostCssParser,
-                        map: shouldUseSourceMap ?
-                            {
-                                // `inline: false` forces the sourcemap to be output into a
-                                // separate file
-                                inline: false,
-                                // `annotation: true` appends the sourceMappingURL to the end of
-                                // the css file, helping the browser find the sourcemap
-                                annotation: true,
-                            } :
-                            false,
+                        map: shouldUseSourceMap ? {
+                            // `inline: false` forces the sourcemap to be output into a
+                            // separate file
+                            inline: false,
+                            // `annotation: true` appends the sourceMappingURL to the end of
+                            // the css file, helping the browser find the sourcemap
+                            annotation: true,
+                        } : false,
                     },
                     cssProcessorPluginOptions: {
                         preset: ['default', { minifyFontValues: { removeQuotes: false } }],
@@ -376,6 +368,9 @@ module.exports = function(webpackEnv) {
                                             },
                                         },
                                     ],
+                                    [
+                                        "import", { libraryName: "antd", style: "css" }
+                                    ]
                                 ],
                                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                                 // It enables caching results in ./node_modules/.cache/babel-loader/
@@ -456,7 +451,14 @@ module.exports = function(webpackEnv) {
                                     sourceMap: isEnvProduction && shouldUseSourceMap,
                                 },
                                 'sass-loader'
-                            ),
+                            ).concat({
+                                loader: 'sass-resources-loader',
+                                options: {
+                                    resources: [
+                                        path.resolve(__dirname, './../src/styles/main.scss')
+                                    ]
+                                }
+                            }),
                             // Don't consider CSS imports dead code even if the
                             // containing package claims to have no side effects.
                             // Remove this when webpack adds a warning or an error for this.
@@ -510,8 +512,7 @@ module.exports = function(webpackEnv) {
                         inject: true,
                         template: paths.appHtml,
                     },
-                    isEnvProduction ?
-                    {
+                    isEnvProduction ? {
                         minify: {
                             removeComments: true,
                             collapseWhitespace: true,
@@ -626,11 +627,9 @@ module.exports = function(webpackEnv) {
                 useTypescriptIncrementalApi: true,
                 checkSyntacticErrors: true,
                 resolveModuleNameModule: process.versions.pnp ?
-                    `${__dirname}/pnpTs.js` :
-                    undefined,
+                    `${__dirname}/pnpTs.js` : undefined,
                 resolveTypeReferenceDirectiveModule: process.versions.pnp ?
-                    `${__dirname}/pnpTs.js` :
-                    undefined,
+                    `${__dirname}/pnpTs.js` : undefined,
                 tsconfig: paths.appTsConfig,
                 reportFiles: [
                     '**',
