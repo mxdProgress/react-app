@@ -10,7 +10,8 @@ class Code extends Component{
             username:'',
             loadingStatus:false,
             codeText:'获取验证码',
-            codeDisabled:false
+            codeDisabled:false,
+            module:''
         }
     }
 
@@ -31,10 +32,10 @@ class Code extends Component{
         })
         const pam = {
             username:this.state.username,
-            module:'login'
+            module:this.state.module
         }
         getCodes(pam).then(res=>{
-            // console.log(res);
+            message.success(res.data.message)
             this.count()
         }).catch(err=>{
             this.setState({

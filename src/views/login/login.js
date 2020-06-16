@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from "react";
-import { Form, Input, Button, Row, Col } from 'antd';
+import { Form, Input, Button, Row, Col , message} from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { CheckPassWord } from '../../utils/validator';
 import {login } from '../../api/account';
 import Code from "../../components/code";
+import CryptoJs from "crypto-js";
 
 
 class Login extends Component {
@@ -10,25 +12,51 @@ class Login extends Component {
         super();
         this.state = {
             username:'',
+            module:'login',
+            password:'',
+            code:''
         }
     }
     //email改变事件
     emailChange = (e) => {
-        console.log(e.target.value)
         this.setState({
             username:e.target.value
         })
     }
 
+    //密码改变事件
+    passwordChange = (e) => {
+        this.setState({
+            password:e.target.value
+        })
+    }
+
+    //验证码改变事件
+    codeChange = (e) => {
+        this.setState({
+            code:e.target.value
+        })
+    }
+
     //表单提交
     onFinish = values => {
-        console.log('Received values of form: ', values);
-        login().then(res=>{
-            console.log(res)
+        let requestData = {
+            username:this.state.username,
+            password:CryptoJs.MD5(this.state.password).toString(),
+            code:this.state.code
+        }
+        login(requestData).then(res=>{
+            let data = res.data;
+            if(data.resCode==0){
+                message.success(data.message);
+            }else{
+                message.warning(data.message);
+            }
         }).catch(err=>{
 
         });
     };
+
     //点击切换登录注册
     toggleForm = () => {
         this.props.switchForm('register')
@@ -52,7 +80,7 @@ class Login extends Component {
                                 [{ required: true, message: '邮箱不能为空!' },
                                 { type:'email', message: '邮箱格式不正确!' }]
                                 }>
-                                <Input onChange={this.emailChange} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="email" />
+                                <Input onChange={this.emailChange} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入邮箱" />
                             </Form.Item>
                             <Form.Item name="password" rules={
                                 [{ required: true, message: '密码不能为空!' },
@@ -60,8 +88,8 @@ class Login extends Component {
                                 // {max:20,message:'密码不能大于20位!'},
                                     ({ getFieldValue }) => ({
                                         validator(rule, value) {
-                                            if (!value || value.length<6) {
-                                                return Promise.reject('密码小于6位!');
+                                            if(!CheckPassWord(value)){
+                                                return Promise.reject('必须为字母加数字加特殊符号且长度不小于8位!');
                                             }else{
                                                 return Promise.resolve();
                                             }
@@ -69,15 +97,15 @@ class Login extends Component {
                                     }),
                                 ]
                                 }>
-                                <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password" />
+                                <Input onChange={this.passwordChange} prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="请输入密码" />
                             </Form.Item>
                             <Form.Item name="code" rules={[{ required: true, message: '验证码不能为空!' }]} >
                                 <Row gutter={13}>
                                     <Col span={15}>
-                                        <Input prefix={<LockOutlined className="site-form-item-icon" />} type="number" placeholder="code" />
+                                        <Input onChange={this.codeChange} prefix={<LockOutlined className="site-form-item-icon" />} type="text" placeholder="验证码" />
                                     </Col>
                                     <Col span={9}>
-                                        <Code username = {this.state.username} />
+                                        <Code username = {this.state.username} module={this.state.module}/>
                                         {/* <Button type="danger" disabled={codeDisabled} loading={loadingStatus} block onClick={this.getCode}>{codeText}</Button> */}
                                     </Col>
                                 </Row>
