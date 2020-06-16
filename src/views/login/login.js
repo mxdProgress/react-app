@@ -14,7 +14,9 @@ class Login extends Component {
             username:'',
             module:'login',
             password:'',
-            code:''
+            code:'',
+            loadingStatus:false,
+            codeDisabled:false
         }
     }
     //email改变事件
@@ -45,6 +47,10 @@ class Login extends Component {
             password:CryptoJs.MD5(this.state.password).toString(),
             code:this.state.code
         }
+        this.setState({
+            loadingStatus:true,
+            codeDisabled:true
+        })
         login(requestData).then(res=>{
             let data = res.data;
             if(data.resCode==0){
@@ -52,8 +58,15 @@ class Login extends Component {
             }else{
                 message.warning(data.message);
             }
+            this.setState({
+                loadingStatus:false,
+                codeDisabled:false
+            })
         }).catch(err=>{
-
+            this.setState({
+                loadingStatus:false,
+                codeDisabled:false
+            })
         });
     };
 
@@ -63,6 +76,7 @@ class Login extends Component {
     }
 
     render(){
+        const {codeDisabled , loadingStatus} =this.state;
         return (
             <Fragment>
                 <div className="formHeader">
@@ -113,7 +127,7 @@ class Login extends Component {
                             </Form.Item>
                             
                             <Form.Item>
-                                <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
+                                <Button type="primary" htmlType="submit" isabled={codeDisabled} loading={loadingStatus} className="login-form-button">登录</Button>
                             </Form.Item>
                         </Form>
                     </div>
