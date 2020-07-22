@@ -14,17 +14,35 @@ class Home extends Component {
         };
     }
 
+    toggleCollapsed = () =>{
+        const collapsed = !this.state.collapsed;
+        this.setState({
+            collapsed
+        })
+        sessionStorage.setItem('refreshMenu',collapsed)
+    }
+
+    //刷新页面时记录菜单是否隐藏
+    componentDidMount(){
+        const collapsed = JSON.parse(sessionStorage.getItem('refreshMenu'));
+        this.setState({
+            collapsed
+        });
+    }
+    
+
 
     render(){
         return (
             <Layout style={{height:'100vh'}}>
-                <Header className="site-layout-background" style={{ padding: 0 }}>
-                    <HeaderLayer />
-                </Header>
+                <Sider width={200}  collapsible  collapsed={this.state.collapsed}  trigger={null}>
+                    <SiderLayer  collapsed={this.state.collapsed}/>
+                </Sider>
+
                 <Layout>
-                    <Sider width={200}  className="site-layout-background">
-                        <SiderLayer />
-                    </Sider>
+                    <Header className="site-layout-background" style={{ padding: 0 }}>
+                        <HeaderLayer toggleCollapsed={this.toggleCollapsed} />
+                    </Header>
                     <Content className="site-layout-background">
                         <ContentLayer />
                     </Content>

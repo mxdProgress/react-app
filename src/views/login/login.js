@@ -7,6 +7,7 @@ import Code from "../../components/code";
 import CryptoJs from "crypto-js";
 import { withRouter } from 'react-router-dom';
 import {setToken} from '../../utils/session';
+import {setCookie,setUsername} from '../../utils/cookie'
 
 
 
@@ -62,7 +63,9 @@ class Login extends Component {
                     codeDisabled:false
                 })
                 message.success(data.message);
-                setToken(data.data.token);
+                // setToken(data.data.token);
+                setCookie(data.data.token);
+                setUsername(data.data.username);
                 this.props.history.push('index');
             }else{
                 message.warning(data.message);

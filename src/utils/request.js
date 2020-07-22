@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getCookie, getUsername } from './cookie';
 
 //第一步 创建实例
 var service = axios.create({
@@ -8,7 +9,12 @@ var service = axios.create({
 
 //第二步 请求拦截
 service.interceptors.request.use(function(config) {
-    // 在发送请求之前做些什么
+    console.log(config)
+        // 在发送请求之前做些什么
+    console.log(getCookie('token'))
+    config.headers['Token'] = getCookie()
+    config.headers['Username'] = getUsername()
+
     return config;
 }, function(error) {
     // 对请求错误做些什么

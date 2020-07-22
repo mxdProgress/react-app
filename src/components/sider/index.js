@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component,Fragment } from 'react';
 import MenuSider from '../../components/menuSider/index';
 
 
@@ -7,9 +7,17 @@ class Sider extends Component {
         super(props);
         this.state = {}
     }
+    
+
+  
     render(){
         return(
-            <MenuSider />
+            <Fragment>
+                <div className={["logo" , this.props.collapsed ? "logoWidth":""].join(' ')}>
+                    <div className="logoIcon"></div>
+                </div> 
+                <MenuSider />
+            </Fragment>
         )
     }
 }
