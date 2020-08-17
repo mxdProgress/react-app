@@ -3,3 +3,9 @@
 body {
     background-color: #001529 !important;
 }
+
+.inline-button {
+    Button+Button {
+        margin-left: 15px;
+    }
+}
