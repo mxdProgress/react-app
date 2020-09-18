@@ -63,6 +63,7 @@ class depHoem extends Component {
         })
 
         //redux 测试用
+        //在加一行注释
         Store.dispatch(addstatus('所有','all'))
     }
     
