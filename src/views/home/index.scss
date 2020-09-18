@@ -1,0 +1,30 @@
+.ant-layout-header {
+    @include webkit(box-shadow, 0 0 10px #ccc);
+    background-color: #fff !important;
+}
+
+.logo {
+    width: 200px;
+    height: 64px;
+    background: #001529;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .logoIcon {
+        width: 150px;
+        height: 40px;
+        background-color: #2c4863;
+    }
+    transition: all 0.1s ease;
+}
+
+.ant-layout-content {
+    border: 20px #f1f1f1 solid;
+    background-color: #fff;
+    padding: 30px;
+    overflow: auto;
+}
+
+.logoWidth {
+    width: 80px;
+}

@@ -5,16 +5,22 @@ import { CheckPassWord } from '../../utils/validator';
 import {login } from '../../api/account';
 import Code from "../../components/code";
 import CryptoJs from "crypto-js";
+import { withRouter } from 'react-router-dom';
+import {setToken} from '../../utils/session';
+import {setCookie,setUsername} from '../../utils/cookie'
+
 
 
 class Login extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             username:'',
             module:'login',
             password:'',
-            code:''
+            code:'',
+            loadingStatus:false,
+            codeDisabled:false
         }
     }
     //email改变事件
@@ -45,15 +51,31 @@ class Login extends Component {
             password:CryptoJs.MD5(this.state.password).toString(),
             code:this.state.code
         }
+        this.setState({
+            loadingStatus:true,
+            codeDisabled:true
+        })
         login(requestData).then(res=>{
             let data = res.data;
             if(data.resCode==0){
+                this.setState({
+                    loadingStatus:false,
+                    codeDisabled:false
+                })
                 message.success(data.message);
+                // setToken(data.data.token);
+                setCookie(data.data.token);
+                setUsername(data.data.username);
+                this.props.history.push('index');
             }else{
                 message.warning(data.message);
             }
+           
         }).catch(err=>{
-
+            this.setState({
+                loadingStatus:false,
+                codeDisabled:false
+            })
         });
     };
 
@@ -63,6 +85,7 @@ class Login extends Component {
     }
 
     render(){
+        const {codeDisableds , loadingStatus} =this.state;
         return (
             <Fragment>
                 <div className="formHeader">
@@ -113,7 +136,7 @@ class Login extends Component {
                             </Form.Item>
                             
                             <Form.Item>
-                                <Button type="primary" htmlType="submit" className="login-form-button">登录</Button>
+                                <Button type="primary" htmlType="submit" isabled={codeDisableds} loading={loadingStatus} className="login-form-button">登录</Button>
                             </Form.Item>
                         </Form>
                     </div>
@@ -122,4 +145,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default withRouter(Login);

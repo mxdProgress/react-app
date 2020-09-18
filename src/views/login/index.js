@@ -21,8 +21,8 @@ class Login extends Component {
     render(){
         return (
             <Fragment>
-                <div className="formWrap">
-                    {this.state.formType ==='login' ? <LoginForm switchForm={this.switchForm}></LoginForm> : <RegisterForm switchForm={this.switchForm}></RegisterForm>}
+                <div className="formWrap"> 
+                    {this.state.formType === 'login' ? <LoginForm switchForm={this.switchForm}></LoginForm> : <RegisterForm switchForm={this.switchForm}></RegisterForm>}
                 </div>
             </Fragment>
         )
