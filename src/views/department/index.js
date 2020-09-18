@@ -61,6 +61,8 @@ class depHoem extends Component {
         Store.subscribe(()=>{
             console.log(Store.getState())
         })
+
+        //redux 测试用
         Store.dispatch(addstatus('所有','all'))
     }
     
