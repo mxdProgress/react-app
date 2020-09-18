@@ -35,3 +35,14 @@ export function Delete(data) {
         data: data,
     })
 }
+/**
+ * 编辑部门
+ */
+
+export function editor(data) {
+    return service.request({
+        url: "/department/detailed/",
+        method: 'POST',
+        data: data,
+    })
+}

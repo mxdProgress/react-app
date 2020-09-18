@@ -5,7 +5,6 @@ import Home from './views/home/index';
 import ProviterRouter from './components/proviterRouter/index';
 
 import { HashRouter, Switch, Route } from 'react-router-dom';
-
 class App extends Component{
   constructor(){
     super();

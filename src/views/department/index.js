@@ -1,6 +1,9 @@
 import React , { Component, Fragment } from 'react';
 import { Form,Input, Button,Table ,Switch,message,Modal} from 'antd';
 import { GetList,Delete } from '../../api/department';
+import Store from '../../store/Index';
+import { addstatus } from '../../store/action/ConfigReducer'
+import { Link } from 'react-router-dom';
 
 
 class depHoem extends Component {
@@ -42,7 +45,9 @@ class depHoem extends Component {
                     render:(text,currentRow)=>{
                         return(
                             <div className="inline-button">
-                                <Button type="primary">编辑</Button>
+                                <Button type="primary">
+                                    <Link to={{pathname:'/index/department/add', state:{id:currentRow.id}}}>编辑</Link>
+                                </Button>
                                 <Button onClick={()=>this.deleteFun(currentRow.id)}>删除</Button>
                             </div>
                         )
@@ -52,7 +57,11 @@ class depHoem extends Component {
         }
     }
     componentDidMount(){
-        this.getListFun()
+        this.getListFun();
+        Store.subscribe(()=>{
+            console.log(Store.getState())
+        })
+        Store.dispatch(addstatus('所有','all'))
     }
     
 
@@ -82,7 +91,6 @@ class depHoem extends Component {
             id:id
         })
     }
-
     onFinish = values => {
         this.setState({
             keyWord:values.username,

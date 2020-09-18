@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, InputNumber ,Radio ,Button,message } from 'antd';
-import { depAddForm } from '../../api/department';
+import { depAddForm,editor } from '../../api/department';
 class depAdd extends Component {
     constructor(props) {
         super(props)
@@ -11,6 +11,20 @@ class depAdd extends Component {
            },
            loading:false
         }
+    }
+    componentDidMount(){
+        if(!this.props.location.state) return false;
+        this.getEditFun()
+    }
+
+    getEditFun = () => {
+        editor({id:this.props.location.state.id}).then((res)=>{
+            console.log(res)
+            if(res.status==200){
+                const data=res.data.data
+                this.refs.form.setFieldsValue(data) 
+            }
+        })
     }
 
     onFinish = (value) => {
@@ -28,7 +42,8 @@ class depAdd extends Component {
         return (
                <Form
                     {...this.state.layout}
-                    name="basic"
+                    name="form"
+                    ref="form"
                     initialValues={{ number: 0 ,status:true}}
                     onFinish={this.onFinish}
                     >
